@@ -46,3 +46,13 @@ margin-right: auto;
   right: 0px;
 }
 
+.fb {
+  background-color:  #3b5998;
+  color : white; 
+  margin-top: 2%;   
+  width: 120px;
+}
+
+.signup {
+  width: 70%;
+}

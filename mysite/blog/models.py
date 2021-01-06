@@ -1,11 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
 class Post(models.Model):
-	author = models.ForeignKey('auth.User',on_delete=models.CASCADE)
+	author = models.ForeignKey('auth.User',related_name='posts',on_delete=models.CASCADE)
 	title = models.CharField(max_length=200)
 	text = models.TextField()
 	create_date = models.DateTimeField(default=timezone.now)
@@ -27,9 +28,10 @@ class Post(models.Model):
 class Comment(models.Model):
 	post = models.ForeignKey('blog.Post',related_name='comments',on_delete=models.CASCADE)
 	author = models.CharField(max_length=200)
-	text = models.TextField()
+	text = models.TextField(blank=False)
 	create_date = models.DateTimeField(default=timezone.now)
 	approved_comment = models.BooleanField(default=False)
+
 
 	def approve(self):
 		self.approved_comment = True

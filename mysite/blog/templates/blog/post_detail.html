@@ -1,6 +1,7 @@
 {% extends 'blog/base.html' %}
 {% block content %}
 
+
 	<h1 class="posttitle loader">{{ post.title }}</h1>
 	{% if post.published_date %}
 		<div class="date postdate">
@@ -12,7 +13,7 @@
 
 	<p class="postcontent">{{ post.text|safe|linebreaksbr }}</p>
 
-	{% if user.is_authenticated %}
+	{% if user.is_authenticated and isOwner %}
 		<a class="btn btn-dark" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
 
 		<a class="btn btn-dark" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
@@ -29,7 +30,7 @@
 			   <p>{{comment.text|safe|linebreaks}}</p>
 			   <p>Posted by: {{comment.author}}</p>
 			{% endif %}
-			{% if not comment.approved_comment %}
+			{% if not comment.approved_comment and isOwner %}
 					<a class="btn btn-dark" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></a>
 
 					<a class="btn btn-dark" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></a>

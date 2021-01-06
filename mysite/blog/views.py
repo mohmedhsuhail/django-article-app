@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from blog.forms import Postform,CommentForm
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 
 class AboutView(TemplateView):
 	template_name = 'about.html'
@@ -18,6 +19,15 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
 	model = Post
+
+	def get_context_data(self,**kwargs):
+		context = super(PostDetailView,self).get_context_data(**kwargs)
+		context['isOwner'] = False
+		owner = User.objects.get(posts__pk=self.kwargs.get('pk'))
+		print(self.request.user,owner.username)
+		if owner.username == self.request.user.username:
+			context['isOwner'] = True
+		return context
 
 class CreatePostView(LoginRequiredMixin,CreateView):
 	login_url = '/login/'
